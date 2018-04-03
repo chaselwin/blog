@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chasel.blog.dao.IUserDao">
+  
+  <sql id="baseSql">
+  	SELECT 
+	  	u.id id,
+	  	u.account account,
+	  	u.password password,
+	  	u.name name
+  	FROM t_user u
+  </sql>
+  
+  <select id="findAll" resultType="com.chasel.blog.vo.User">
+  	<include refid="baseSql"></include>
+  	<where>
+  		1=1
+	  	<if test='id!=null and id!=""'>
+	  		AND id=#{id,jdbcType=INTEGER}
+	  	</if>
+	  	<if test='account!=null and account!=""'>
+	  		AND account LIKE CONCAT(CONCAT('%',#{account,jdbcType=VARCHAR}),'%')
+	  	</if>
+	  	<if test='name!=null and name!=""'>
+	  		AND name LIKE CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
+	  	</if>
+  	</where>
+  </select>
+  
+  <insert id="save" parameterType="com.chasel.blog.vo.User">
+  	INSERT INTO t_user
+  	(
+	  	account,
+	  	password,
+	  	name
+  	)
+  	VALUES
+  	(
+	  	#{account,jdbcType=VARCHAR},
+	  	#{password,jdbcType=VARCHAR},
+	  	#{name,jdbcType=VARCHAR}
+	)
+  </insert>
+  
+  <delete id="delete" parameterType="int">
+  	DELETE FROM t_user WHERE id=#{id}
+  </delete>
+  
+  <update id="update" parameterType="com.chasel.blog.vo.User">
+  	UPDATE t_user
+  	<set> 
+  		<if test="null != password and '' != password">password=#{password,jdbcType=VARCHAR},</if>
+  		<if test="null != name and '' != name">name=#{name,jdbcType=VARCHAR},</if>
+  	</set>
+  	WHERE id=#{id}
+  </update>
+  
+  <select id="findById" parameterType="int" resultType="com.chasel.blog.vo.User">
+  	<include refid="baseSql"></include>
+	WHERE u.id=#{id}
+  </select>
+  
+  <select id="login" parameterType="String" resultType="com.chasel.blog.vo.User">
+  	<include refid="baseSql"></include>
+	WHERE u.account=#{account} AND u.password=#{password}
+  </select>
+</mapper>
