@@ -26,8 +26,11 @@ public class Swagger2 {
 
 	@SuppressWarnings("deprecation")
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("My blog project API").description("用心做一件事,你能看到很多不一样的风景!")
-				.termsOfServiceUrl(SWAGGER_URL).contact("Chasel").version("1.0")
+		return new ApiInfoBuilder().title("My blog project API")
+				.description("用心做一件事,你能看到很多不一样的风景!")
+				//.termsOfServiceUrl(SWAGGER_URL)
+				.contact("Chasel")
+				.version("1.0")
 				.build();
 	}
 }

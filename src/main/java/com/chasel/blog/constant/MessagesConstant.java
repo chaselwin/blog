@@ -8,7 +8,7 @@ public class MessagesConstant implements Serializable {
 	//项目结构变动需要改动
 	public static final String EXECUTION="execution(public * com.chasel.blog.controller.*.*(..))";
 	public static final String BASEPACKGE="com.chasel.blog";
-	public static final String SWAGGER_URL="http://localhost:8080/girl/swagger-ui.html";
+	//public static final String SWAGGER_URL="http://localhost:8080/girl/swagger-ui.html";
 
 	public static final String GIRL = "girl";
 
