@@ -10,6 +10,7 @@ import static com.chasel.blog.constant.MessagesConstant.UPDATE_FAIL;
 import static com.chasel.blog.constant.MessagesConstant.UPDATE_SUCCESS;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@ApiOperation("用户分页查询")
-	@RequestMapping(path = "/query/page/{pageSize}/{pageNum}", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(path = "/query/page/{pageSize}/{pageNum}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseResult findAll(@RequestBody User user, PageInfo<User> pageInfo) {
 
 		return value(() -> {return userService.findAll(user, pageInfo);},QUERY_SUCCESS,QUERY_FAIL);
@@ -51,10 +52,10 @@ public class UserController extends BaseController {
 	 * 
 	 */
 	@ApiOperation("添加用户")
-	@RequestMapping(path = "/add", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(path = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseResult save(@RequestBody User user) {
 
-		return process(() -> {userService.save(user);}, ADD_SUCCESS, ADD_FAIL);
+		return processz(() -> {userService.save(user);}, ADD_SUCCESS, ADD_FAIL);
 	}
 
 	/**
@@ -62,7 +63,7 @@ public class UserController extends BaseController {
 	 * 
 	 */
 	@ApiOperation("根据ID查询用户")
-	@RequestMapping(path = "/findUser/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(path = "/findUser/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseResult findById(@PathVariable int id) {
 
 		return value(() -> {return userService.findById(id);}, QUERY_SUCCESS, QUERY_FAIL);
@@ -73,7 +74,7 @@ public class UserController extends BaseController {
 	 * 
 	 */
 	@ApiOperation("根据ID删除用户")
-	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseResult delete(@PathVariable int id) {
 
 		return process(() -> {userService.delete(id);}, DEL_SUCCESS, DEL_FAIL);
@@ -84,7 +85,7 @@ public class UserController extends BaseController {
 	 * 
 	 */
 	@ApiOperation("编辑用户:根据用户ID编辑用户密码或者名字")
-	@RequestMapping(path = "/update", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(path = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseResult update(@RequestBody User user) {
 
 		return process(() -> {userService.update(user);}, UPDATE_SUCCESS, UPDATE_FAIL);

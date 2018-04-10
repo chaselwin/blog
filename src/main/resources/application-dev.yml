@@ -3,12 +3,12 @@ minio:
     sort: 9000
     accesskey: chasel
     secretkey: chasel#123
-    bucket: photo
+    bucket: blog
 
     
 dbcp:
     datasource:
-       url: jdbc:mysql://localhost:3306/girl?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+       url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false
        username: root
        password: chasel#123
        driverClassName: com.mysql.jdbc.Driver

@@ -1,35 +1,98 @@
 package com.chasel.blog.vo;
 
 import java.io.Serializable;
-public class User implements Serializable {
+public class User extends Base implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	private int id;
+	//id
+	private long id;
+	//账号
 	private String account;
+	//昵称
+	private String nickName;
+	//手机
+	private String phone;
+	//email
+	private String email;
+	//角色（1-超级管理员，2-普通管理员，0-普通用户）
+	private int role;
+	//密码
 	private String password;
-	private String name;
 
-	public int getId() {
+	public User() {
+		
+	}
+
+	public User(long id, String account, String nickName, String phone, String email, int role, String password) {
+		super();
+		this.id = id;
+		this.account = account;
+		this.nickName = nickName;
+		this.phone = phone;
+		this.email = email;
+		this.role = role;
+		this.password = password;
+	}
+
+	public long getId() {
 		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getAccount() {
 		return account;
 	}
 
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getRole() {
+		return role;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
+	}
+
 	public String getPassword() {
 		return password;
 	}
 
-	public String getName() {
-		return name;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", account=" + account + ", password=" + password + ", name=" + name + "]";
+		return "User [id=" + id + ", account=" + account + ", nickName=" + nickName + ", phone=" + phone + ", email="
+				+ email + ", role=" + role + ", password=" + password + "]";
 	}
-
 	
-
 }
