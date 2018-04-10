@@ -134,20 +134,22 @@
   	WHERE user_id=#{userId} and identity_type=#{identityType}
   </update>
   
-  
-  
+  <!-- 用户信息分页模糊查询 -->
   <select id="findAll" resultType="com.chasel.blog.vo.User">
   	<include refid="userBaseSql"></include>
   	<where>
   		1=1
-	  	<if test='id!=null and id!=""'>
-	  		AND id=#{id,jdbcType=INTEGER}
-	  	</if>
 	  	<if test='account!=null and account!=""'>
 	  		AND account LIKE CONCAT(CONCAT('%',#{account,jdbcType=VARCHAR}),'%')
 	  	</if>
-	  	<if test='name!=null and name!=""'>
-	  		AND name LIKE CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
+	  	<if test='nickName!=null and nickName!=""'>
+	  		AND nick_name LIKE CONCAT(CONCAT('%',#{nickName,jdbcType=VARCHAR}),'%')
+	  	</if>
+	  	<if test='phone!=null and phone!=""'>
+	  		AND phone LIKE CONCAT(CONCAT('%',#{phone,jdbcType=VARCHAR}),'%')
+	  	</if>
+	  	<if test='email!=null and email!=""'>
+	  		AND email LIKE CONCAT(CONCAT('%',#{email,jdbcType=VARCHAR}),'%')
 	  	</if>
   	</where>
   </select>
