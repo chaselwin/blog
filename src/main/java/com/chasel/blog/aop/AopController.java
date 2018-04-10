@@ -28,6 +28,7 @@ public class AopController {
 		String method = pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName();
 		method = method.substring(method.indexOf("controller.")+11, method.length());
 		try {
+			log.info("-----Welcome to " + method + "-----");
 			Object o = pjp.proceed();
 			log.info(method + " 运行时间： " + (System.currentTimeMillis() - startTime) + "ms\n");
 			return o;

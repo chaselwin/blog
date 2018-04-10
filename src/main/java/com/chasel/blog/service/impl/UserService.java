@@ -73,10 +73,12 @@ public class UserService extends BaseService implements IUserService {
 
 	@Override
 	public void delete(long id) throws BlogException {
-		if (findById(id) == null) {
+		User user = findById(id);
+		if (user == null) {
 			throw new BlogException(CodeConstants.ERR_CODE_99, MSG_ID_NULL);
 		} else {
 			userDao.delete(id);
+			userDao.delAuthByUserId(id);
 		}
 	}
 

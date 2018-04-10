@@ -100,32 +100,32 @@ public class ResourceUtil {
 	
 	public static boolean getSession() {
 		boolean bool=false;
-		String userName = null;
+		Long userName = null;
 		RequestAttributes attr = RequestContextHolder.getRequestAttributes();
 		if (attr != null) {
 			HttpServletRequest request = ((ServletRequestAttributes) attr).getRequest();
 			if (request != null) {
 				HttpSession session = request.getSession();
 				if (session!=null) {
-					userName = (String) session.getAttribute(UserService.USER_NAME);
+					userName = (Long) session.getAttribute(UserService.USER_NAME);
 				}
 			}
 		}
-		if (!StringUtils.isEmpty(userName)) {
+		if (null != userName) {
 			bool=true;
 		}
 		return bool;
 	}
 	
-	public static String getSessionName() {
-		String userId = null;
+	public static Long getSessionName() {
+		Long userId = null;
 		RequestAttributes attr = RequestContextHolder.getRequestAttributes();
 		if (attr != null) {
 			HttpServletRequest request = ((ServletRequestAttributes) attr).getRequest();
 			if (request != null) {
 				HttpSession session = request.getSession();
 				if (session!=null) {
-					userId = (String) session.getAttribute(UserService.USER_NAME);
+					userId = (Long) session.getAttribute(UserService.USER_NAME);
 				}
 			}
 		}

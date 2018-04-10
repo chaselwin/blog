@@ -15,4 +15,6 @@ public interface IUserDao extends IBaseDao<User> {
 
 	public User queryUserByAccountAndNickName(@Param("account")String account,@Param("nickName") String nickName);
 
+	public void delAuthByUserId(@Param("userId") long userId);
+
 }

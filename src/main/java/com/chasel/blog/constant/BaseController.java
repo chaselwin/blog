@@ -27,13 +27,12 @@ public abstract class BaseController extends I18NSupport {
 	protected PageInfo<?> doQuery(LamCallable run) {
 		PageInfo<?> pageInfo = new PageInfo<>();
 		try {
-			log.info("-----Welcome to doQuery-----");
 			pageInfo = (PageInfo<?>) run.run();
 		} catch (BlogException e) {
-			log.error("doQuery has an error: {} {}" + e.getErrCode() + "------and------" + e.getErrMsg());
+			log.error("doQuery has an error {} {}:" + e.getErrCode() + "------and------" + e.getErrMsg());
 
 		} catch (Exception e) {
-			log.error("doQuery has an error: {}" + e.getMessage());
+			log.error("doQuery has an error {}:" + e.getMessage());
 
 		}
 		return pageInfo;
@@ -50,7 +49,6 @@ public abstract class BaseController extends I18NSupport {
 	protected ResponseResult process(LamRunnable run, String successMsg, String failMsg) {
 		String responseMsg = "";
 		try {
-			log.info("-----Welcome to process-----");
 			boolean bool = ResourceUtil.getSession();
 			if (!bool) {
 				return new ResponseResult(ResponseStatus.NOT_LOGIN, getMassage(NOT_LOGIN));
@@ -59,11 +57,11 @@ public abstract class BaseController extends I18NSupport {
 				return new ResponseResult(ResponseStatus.SUCCESS, getMassage(successMsg));
 			}
 		} catch (BlogException e) {
-			log.error("process has an error: {} {}" + e.getErrCode() + "------and-------" + e.getErrMsg());
+			log.error("process has an error {} {}:" + e.getErrCode() + "------and-------" + e.getErrMsg());
 			responseMsg = (String) e.getErrMsg();
 
 		} catch (Exception e) {
-			log.error("process has an error: {}" + e.getMessage());
+			log.error("process has an error {}:" + e.getMessage());
 			responseMsg = failMsg;
 		}
 		return new ResponseResult(ResponseStatus.FAIL, getMassage(responseMsg));
@@ -80,7 +78,6 @@ public abstract class BaseController extends I18NSupport {
 	protected ResponseResult value(LamCallable run, String successMsg, String failMsg) {
 		String responseMsg = "";
 		try {
-			log.info("-----Welcome to value-----");
 			boolean bool = ResourceUtil.getSession();
 			if (!bool) {
 				return new ResponseResult(ResponseStatus.NOT_LOGIN, getMassage(NOT_LOGIN));
@@ -90,9 +87,9 @@ public abstract class BaseController extends I18NSupport {
 			}
 		} catch (BlogException e) {
 			responseMsg = (String) e.getErrMsg();
-			log.error("value has an error: {}" + e.getErrCode() + "------and-------" + e.getErrMsg());
+			log.error("value has an error {} {}:" + e.getErrCode() + "------and-------" + e.getErrMsg());
 		} catch (Exception e) {
-			log.error("value has an error: {}" + e.getMessage());
+			log.error("value has an error {}:" + e.getMessage());
 			responseMsg = failMsg;
 		}
 		return new ResponseResult(ResponseStatus.FAIL, getMassage(responseMsg), null);
@@ -109,16 +106,15 @@ public abstract class BaseController extends I18NSupport {
 	protected ResponseResult processz(LamRunnable run, String successMsg, String failMsg) {
 		String responseMsg = "";
 		try {
-			log.info("-----Welcome to processz-----");
 			run.run();
 			return new ResponseResult(ResponseStatus.SUCCESS, getMassage(successMsg));
 
 		} catch (BlogException e) {
-			log.error("process has an error: {} {}" + e.getErrCode() + "------and-------" + e.getErrMsg());
+			log.error("processz has an error {} {}:" + e.getErrCode() + "------and-------" + e.getErrMsg());
 			responseMsg = (String) e.getErrMsg();
 
 		} catch (Exception e) {
-			log.error("process has an error: {}" + e.getMessage());
+			log.error("processz has an error {}:" + e.getMessage());
 			responseMsg = failMsg;
 		}
 		return new ResponseResult(ResponseStatus.FAIL, getMassage(responseMsg));
@@ -135,14 +131,13 @@ public abstract class BaseController extends I18NSupport {
 	protected ResponseResult valuez(LamCallable run, String successMsg, String failMsg) {
 		String responseMsg = "";
 		try {
-			log.info("-----Welcome to valuez-----");
 			Object obj = run.run();
 			return new ResponseResult(ResponseStatus.SUCCESS, getMassage(successMsg), obj);
 		} catch (BlogException e) {
 			responseMsg = (String) e.getErrMsg();
-			log.error("value has an error: {}" + e.getErrCode() + "------and-------" + e.getErrMsg());
+			log.error("valuez has an error {}:" + e.getErrCode() + "------and-------" + e.getErrMsg());
 		} catch (Exception e) {
-			log.error("value has an error: {}" + e.getMessage());
+			log.error("valuez has an error {}:" + e.getMessage());
 			responseMsg = failMsg;
 		}
 		return new ResponseResult(ResponseStatus.FAIL, getMassage(responseMsg), null);

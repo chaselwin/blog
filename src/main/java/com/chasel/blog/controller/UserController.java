@@ -51,8 +51,8 @@ public class UserController extends BaseController {
 	 * 添加用户
 	 * 
 	 */
-	@ApiOperation("添加用户")
-	@RequestMapping(path = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation("用户注册")
+	@RequestMapping(path = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseResult save(@RequestBody User user) {
 
 		return processz(() -> {userService.save(user);}, ADD_SUCCESS, ADD_FAIL);
@@ -64,7 +64,7 @@ public class UserController extends BaseController {
 	 */
 	@ApiOperation("根据ID查询用户")
 	@RequestMapping(path = "/findUser/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ResponseResult findById(@PathVariable int id) {
+	public @ResponseBody ResponseResult findById(@PathVariable Long id) {
 
 		return value(() -> {return userService.findById(id);}, QUERY_SUCCESS, QUERY_FAIL);
 	}
@@ -75,7 +75,7 @@ public class UserController extends BaseController {
 	 */
 	@ApiOperation("根据ID删除用户")
 	@RequestMapping(path = "/delete/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ResponseResult delete(@PathVariable int id) {
+	public @ResponseBody ResponseResult delete(@PathVariable Long id) {
 
 		return process(() -> {userService.delete(id);}, DEL_SUCCESS, DEL_FAIL);
 	}

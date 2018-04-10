@@ -98,6 +98,16 @@
 	</where> 
   </select>
   
+  <!-- 根据用户ID删除用户信息 -->
+  <delete id="delete" parameterType="java.lang.Long">
+  	DELETE FROM t_user WHERE id=#{id}
+  </delete>
+  
+  <!-- 根据用户ID删除用户标识表信息 -->
+  <delete id="delAuthByUserId" parameterType="java.lang.Long">
+  	DELETE FROM t_user_auth WHERE user_id=#{userId}
+  </delete>
+  
   <select id="findAll" resultType="com.chasel.blog.vo.User">
   	<include refid="userBaseSql"></include>
   	<where>
@@ -113,10 +123,6 @@
 	  	</if>
   	</where>
   </select>
-  
-  <delete id="delete" parameterType="int">
-  	DELETE FROM t_user WHERE id=#{id}
-  </delete>
   
   <update id="update" parameterType="com.chasel.blog.vo.User">
   	UPDATE t_user
