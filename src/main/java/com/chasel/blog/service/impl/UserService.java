@@ -1,7 +1,6 @@
 package com.chasel.blog.service.impl;
 
-import static com.chasel.blog.constant.MessagesConstant.ACCONT_FAIL;
-import static com.chasel.blog.constant.MessagesConstant.NOT_LOGIN;
+import static com.chasel.blog.constant.MessagesConstant.*;
 
 import java.util.List;
 
@@ -16,6 +15,7 @@ import com.chasel.blog.constant.EIdentityType;
 import com.chasel.blog.dao.IUserDao;
 import com.chasel.blog.exception.BlogException;
 import com.chasel.blog.service.IUserService;
+import com.chasel.blog.util.ResourceUtil;
 import com.chasel.blog.vo.User;
 import com.chasel.blog.vo.UserAuth;
 import com.github.pagehelper.PageHelper;
@@ -30,7 +30,7 @@ public class UserService extends BaseService implements IUserService {
 	private static final String MSG_NICK_NAME_NULL = "昵称不能为空";
 	private static final String MSG_EXIT_ACCOUNT_NULL = "账号已存在";
 	private static final String MSG_EXIT_NICK_NULL = "昵称已存在";
-	//private static final String DONT_UPDATE = "不能修改他人账号密码";
+	private static final String DONT_UPDATE = "不能修改他人信息";
 	public static final String USER_NAME = "userName";
 
 	@Autowired
@@ -84,18 +84,33 @@ public class UserService extends BaseService implements IUserService {
 
 	@Override
 	public void update(User user) throws BlogException {
-//		if (user == null||(StringUtils.isEmpty(user.getPassword())&&StringUtils.isEmpty(user.getName()))) {
-//			throw new BlogException(CodeConstants.ERR_CODE_99, MSG_USER_NULL);
-//		} else {
-//			String userName = ResourceUtil.getSessionName();
-//			User userv = findById(user.getId());
-//			if (userName.equalsIgnoreCase(userv.getName())) {
-//				userDao.update(user);
-//			}else{
-//				throw new DuplicateRecordException(CodeConstants.ERR_CODE_99, DONT_UPDATE);
-//			}
-//			userDao.update(user);
-//		}
+		if (user == null||(StringUtils.isEmpty(user.getPassword())
+				&&StringUtils.isEmpty(user.getPhone())&&StringUtils.isEmpty(user.getEmail()))
+				||user.getId() == null) {
+			throw new BlogException(CodeConstants.ERR_CODE_99, MSG_USER_NULL);
+		} else {
+			Long userId = ResourceUtil.getSessionName();
+			User userv = findById(user.getId());
+			if (userId == userv.getId()) {
+				userDao.update(user);
+				if (!StringUtils.isEmpty(user.getPassword())) {
+					List<UserAuth> authList = userDao.queryAuthByUserId(user.getId());
+					authList.forEach(auth -> {
+						if (auth.getIdentityType().equalsIgnoreCase(EIdentityType.ACCOUNT.getString())) {
+							userDao.updateAuthCredential(user.getId(), auth.getIdentityType(), null, user.getPassword());
+						}
+						if (auth.getIdentityType().equalsIgnoreCase(EIdentityType.PHONE.getString())) {
+							if (!StringUtils.isEmpty(user.getPhone())) userDao.updateAuthCredential(user.getId(), auth.getIdentityType(), user.getPhone(), user.getPassword());
+						}
+						if (auth.getIdentityType().equalsIgnoreCase(EIdentityType.EMAIL.getString())) {
+							if (!StringUtils.isEmpty(user.getEmail())) userDao.updateAuthCredential(user.getId(), auth.getIdentityType(), user.getEmail(), user.getPassword());
+						}
+					});
+				}
+			}else{
+				throw new BlogException(CodeConstants.ERR_CODE_99, DONT_UPDATE);
+			}
+		}
 	}
 
 	@Override
@@ -130,7 +145,7 @@ public class UserService extends BaseService implements IUserService {
 		}else{
 			userAuth = userDao.login(identityType, identifier);
 		}
-		if (userAuth == null) throw new BlogException(ACCONT_FAIL);
+		if (userAuth == null || !userAuth.getCredential().equals(credential)) throw new BlogException(ACCONT_FAIL);
 		// 2-> query table user by userId
 		User user = findById(userAuth.getUserId());
 		

@@ -4,7 +4,7 @@ import java.io.Serializable;
 public class User extends Base implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//id
-	private long id;
+	private Long id;
 	//账号
 	private String account;
 	//昵称
@@ -22,7 +22,7 @@ public class User extends Base implements Serializable {
 		
 	}
 
-	public User(long id, String account, String nickName, String phone, String email, int role, String password) {
+	public User(Long id, String account, String nickName, String phone, String email, int role, String password) {
 		super();
 		this.id = id;
 		this.account = account;
@@ -33,11 +33,11 @@ public class User extends Base implements Serializable {
 		this.password = password;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

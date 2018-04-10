@@ -84,7 +84,7 @@ public class UserController extends BaseController {
 	 * 编辑用户
 	 * 
 	 */
-	@ApiOperation("编辑用户:根据用户ID编辑用户密码或者名字")
+	@ApiOperation("编辑用户:根据用户ID编辑用户密码或者手机号或者email")
 	@RequestMapping(path = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseResult update(@RequestBody User user) {
 

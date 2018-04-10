@@ -103,10 +103,38 @@
   	DELETE FROM t_user WHERE id=#{id}
   </delete>
   
+  <!-- 根据用户ID查询用户标识表信息 -->
+  <select id="queryAuthByUserId" parameterType="java.lang.Long" resultType="com.chasel.blog.vo.UserAuth">
+  	<include refid="authBaseSql"></include>
+  	WHERE user_id=#{userId}
+  </select>
+  
   <!-- 根据用户ID删除用户标识表信息 -->
   <delete id="delAuthByUserId" parameterType="java.lang.Long">
   	DELETE FROM t_user_auth WHERE user_id=#{userId}
   </delete>
+  
+  <!-- 更新用户phone、email -->
+  <update id="update" parameterType="com.chasel.blog.vo.User">
+  	UPDATE t_user
+  	<set> 
+  		<if test="null != phone and '' != phone">phone=#{phone,jdbcType=VARCHAR},</if>
+  		<if test="null != email and '' != email">email=#{email,jdbcType=VARCHAR},</if>
+  	</set>
+  	WHERE id=#{id}
+  </update>
+  
+  <!-- 更新auth credential -->
+  <update id="updateAuthCredential">
+  	UPDATE t_user_auth
+  	<set> 
+  		<if test="null != identifier and '' != identifier">identifier=#{identifier,jdbcType=VARCHAR},</if>
+  		<if test="null != credential and '' != credential">credential=#{credential,jdbcType=VARCHAR}</if>
+  	</set>
+  	WHERE user_id=#{userId} and identity_type=#{identityType}
+  </update>
+  
+  
   
   <select id="findAll" resultType="com.chasel.blog.vo.User">
   	<include refid="userBaseSql"></include>
@@ -123,14 +151,5 @@
 	  	</if>
   	</where>
   </select>
-  
-  <update id="update" parameterType="com.chasel.blog.vo.User">
-  	UPDATE t_user
-  	<set> 
-  		<if test="null != password and '' != password">password=#{password,jdbcType=VARCHAR},</if>
-  		<if test="null != name and '' != name">name=#{name,jdbcType=VARCHAR},</if>
-  	</set>
-  	WHERE id=#{id}
-  </update>
   
 </mapper>
