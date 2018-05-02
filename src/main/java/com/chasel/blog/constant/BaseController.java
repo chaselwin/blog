@@ -28,9 +28,12 @@ public abstract class BaseController extends I18NSupport {
 		PageInfo<?> pageInfo = new PageInfo<>();
 		try {
 			pageInfo = (PageInfo<?>) run.run();
+		} catch (IllegalArgumentException e) {
+			log.error("doQuery has an error {} {}:" + e.getMessage());
+
 		} catch (BlogException e) {
 			log.error("doQuery has an error {} {}:" + e.getErrCode() + "------and------" + e.getErrMsg());
-
+			
 		} catch (Exception e) {
 			log.error("doQuery has an error {}:" + e.getMessage());
 
@@ -56,6 +59,10 @@ public abstract class BaseController extends I18NSupport {
 				run.run();
 				return new ResponseResult(ResponseStatus.SUCCESS, getMassage(successMsg));
 			}
+		} catch (IllegalArgumentException e) {
+			log.error("process has an error {} {}:" + e.getMessage());
+			responseMsg = e.getMessage();
+
 		} catch (BlogException e) {
 			log.error("process has an error {} {}:" + e.getErrCode() + "------and-------" + e.getErrMsg());
 			responseMsg = (String) e.getErrMsg();
@@ -85,6 +92,10 @@ public abstract class BaseController extends I18NSupport {
 				Object obj = run.run();
 				return new ResponseResult(ResponseStatus.SUCCESS, getMassage(successMsg), obj);
 			}
+		} catch (IllegalArgumentException e) {
+			log.error("value has an error {} {}:" + e.getMessage());
+			responseMsg = e.getMessage();
+
 		} catch (BlogException e) {
 			responseMsg = (String) e.getErrMsg();
 			log.error("value has an error {} {}:" + e.getErrCode() + "------and-------" + e.getErrMsg());
@@ -108,6 +119,10 @@ public abstract class BaseController extends I18NSupport {
 		try {
 			run.run();
 			return new ResponseResult(ResponseStatus.SUCCESS, getMassage(successMsg));
+
+		} catch (IllegalArgumentException e) {
+			log.error("processz has an error {} {}:" + e.getMessage());
+			responseMsg = e.getMessage();
 
 		} catch (BlogException e) {
 			log.error("processz has an error {} {}:" + e.getErrCode() + "------and-------" + e.getErrMsg());
@@ -133,6 +148,10 @@ public abstract class BaseController extends I18NSupport {
 		try {
 			Object obj = run.run();
 			return new ResponseResult(ResponseStatus.SUCCESS, getMassage(successMsg), obj);
+		} catch (IllegalArgumentException e) {
+			log.error("valuez has an error {} {}:" + e.getMessage());
+			responseMsg = e.getMessage();
+
 		} catch (BlogException e) {
 			responseMsg = (String) e.getErrMsg();
 			log.error("valuez has an error {}:" + e.getErrCode() + "------and-------" + e.getErrMsg());

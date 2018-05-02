@@ -1,6 +1,7 @@
 package com.chasel.blog.service.impl;
 
 import static com.chasel.blog.constant.MessagesConstant.*;
+import static org.springframework.util.Assert.*;
 
 import java.util.List;
 
@@ -39,21 +40,20 @@ public class UserService extends BaseService implements IUserService {
 	@Override
 	public void save(User user) throws BlogException {
 		// 1-> 校验vo参数
-		if (user == null) throw new BlogException(CodeConstants.ERR_CODE_99, MSG_USER_NULL);
+		notNull(user, MSG_USER_NULL);
 		
 		// 2-> 校验账号密码
-		if (StringUtils.isEmpty(user.getAccount()) || StringUtils.isEmpty(user.getPassword())) 
-			throw new BlogException(CodeConstants.ERR_CODE_99, MSG_LOGIN_NULL);
+		isTrue(!(StringUtils.isEmpty(user.getAccount()) || StringUtils.isEmpty(user.getPassword())), MSG_LOGIN_NULL);
 		
 		// 3-> 校验昵称不能为空
-		if (StringUtils.isEmpty(user.getNickName())) throw new BlogException(CodeConstants.ERR_CODE_99, MSG_NICK_NAME_NULL);
+		notNull(StringUtils.isEmpty(user.getNickName()), MSG_NICK_NAME_NULL);
 		
 		// 4-> 校验是否存在账号或昵称
 		User queryUser = userDao.queryUserByAccountAndNickName(user.getAccount(), null);
-		if (null != queryUser) throw new BlogException(CodeConstants.ERR_CODE_99, MSG_EXIT_ACCOUNT_NULL);
+		isTrue(null == queryUser, MSG_EXIT_ACCOUNT_NULL);
 		
 		User queryUserv = userDao.queryUserByAccountAndNickName(null, user.getNickName());
-		if (null != queryUserv) throw new BlogException(CodeConstants.ERR_CODE_99, MSG_EXIT_NICK_NULL);
+		isTrue(null == queryUserv, MSG_EXIT_NICK_NULL);
 		
 		// 4-> 默认普通用户
 		user.setRole(0);
@@ -73,13 +73,13 @@ public class UserService extends BaseService implements IUserService {
 
 	@Override
 	public void delete(long id) throws BlogException {
+		// 1-> 查询user
 		User user = findById(id);
-		if (user == null) {
-			throw new BlogException(CodeConstants.ERR_CODE_99, MSG_ID_NULL);
-		} else {
-			userDao.delete(id);
-			userDao.delAuthByUserId(id);
-		}
+		// 2-> check null
+		notNull(user, MSG_ID_NULL);
+		// 3-> del
+		userDao.delete(id);
+		userDao.delAuthByUserId(id);
 	}
 
 	@Override
@@ -159,13 +159,12 @@ public class UserService extends BaseService implements IUserService {
 		// 1-> Get session value
 		Long userId = (Long) httpSession.getAttribute(USER_NAME);
 		
-		// 2-> Query table User
-		if (StringUtils.isEmpty(userId)) {
-			throw new BlogException(getMassage(NOT_LOGIN));
-		}else{
-			User user = findById(userId);
-			return user.getNickName();
-		}
+		// 2-> check true
+		isTrue(!StringUtils.isEmpty(userId), NOT_LOGIN);
+		
+		// 3-> Query table User
+		User user = findById(userId);
+		return user.getNickName();
 	}
 
 	@Override
