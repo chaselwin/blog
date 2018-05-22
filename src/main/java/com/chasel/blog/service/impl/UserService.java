@@ -55,13 +55,13 @@ public class UserService extends BaseService implements IUserService {
 		User queryUserv = userDao.queryUserByAccountAndNickName(null, user.getNickName());
 		isTrue(null == queryUserv, MSG_EXIT_NICK_NULL);
 		
-		// 4-> 默认普通用户
+		// 5-> 默认普通用户
 		user.setRole(0);
 		
-		// 5-> save User table
+		// 6-> save User table
 		userDao.save(user);
 		
-		// 6-> 根据实际情况save User_Auth table
+		// 7-> 根据实际情况save User_Auth table
 		userDao.saveUserAuth(new UserAuth(user.getId(), EIdentityType.ACCOUNT.getString(), user.getAccount(), user.getPassword()));
 		
 		if (!StringUtils.isEmpty(user.getPhone())) 
