@@ -1,0 +1,28 @@
+spring:
+    profiles:
+        active: dev
+    http:    
+        multipart:
+            maxFileSize: 10Mb
+            maxRequestSize: 50Mb
+
+#mybatis配置
+mybatis:
+#    annotationClass: org.springframework.boot.mybatis.autoconfigure.Mapper
+#    configLocation: "mybatis-configuration.xml"
+    mapper-locations: "classpath:mapper/*.xml" 
+# If the 'spring.mybatis.configLocation' property is used when the 'spring.mybatis.configurationProperties' property is ignored.
+    configuration-properties:
+      aggressiveLazyLoading: false
+      lazyLoadingEnabled: true
+      lazyLoadTriggerMethods: ""
+      mapUnderscoreToCamelCase: true
+
+server: 
+    port: 8010
+    contextPath: /blog
+    maxHttpHeaderSize: 8192
+   
+logging.level.org.springframework.web.servlet.DispatherServlet: DEBUG
+logging.level.com.chasel.blog.dao: DEBUG
+

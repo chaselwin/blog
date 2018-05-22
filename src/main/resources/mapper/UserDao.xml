@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chasel.blog.dao.IUserDao">
+  
+  <sql id="authBaseSql">
+  	SELECT 
+	  	a.id id,
+	  	a.user_id userId,
+	  	a.identity_type identityType,
+	  	a.identifier identifier,
+	  	a.credential credential,
+	  	a.create_time createTime,
+	  	a.update_time updateTime
+  	FROM t_user_auth a
+  </sql>
+  
+  <sql id="userBaseSql">
+  	SELECT 
+	  	u.id id,
+	  	u.account account,
+	  	u.nick_name nickName,
+	  	u.phone phone,
+	  	u.email email,
+	  	u.role role,
+	  	u.create_time createTime,
+	  	u.update_time updateTime
+  	FROM t_user u
+  </sql>
+  
+  <!-- 登录查询 -->
+  <select id="login" parameterType="String" resultType="com.chasel.blog.vo.UserAuth">
+  	<include refid="authBaseSql"></include>
+	WHERE a.identity_type=#{identityType} AND a.identifier=#{identifier}
+  </select>
+  
+  <!-- 根据userID查询用户信息 -->
+  <select id="findById" parameterType="long" resultType="com.chasel.blog.vo.User">
+  	<include refid="userBaseSql"></include>
+	WHERE u.id=#{id}
+  </select>
+  
+  <!-- 用户注册：用户表 -->
+  <insert id="save" parameterType="com.chasel.blog.vo.User" useGeneratedKeys="true" keyProperty="id">
+  	INSERT INTO t_user
+  	(
+	  	account,
+	  	nick_name,
+	  	phone,
+	  	email,
+	  	role,
+	  	create_time,
+	  	update_time
+  	)
+  	VALUES
+  	(
+	  	#{account,jdbcType=VARCHAR},
+	  	#{nickName,jdbcType=VARCHAR},
+	  	#{phone,jdbcType=VARCHAR},
+	  	#{email,jdbcType=VARCHAR},
+	  	#{role,jdbcType=VARCHAR},
+	  	now(),
+	  	now()
+	)
+  </insert>
+  
+  <!-- 用户注册：标识表 -->
+  <insert id="saveUserAuth" parameterType="com.chasel.blog.vo.UserAuth">
+  	INSERT INTO t_user_auth
+  	(
+	  	user_id,
+	  	identity_type,
+	  	identifier,
+	  	credential,
+	  	create_time,
+	  	update_time
+  	)
+  	VALUES
+  	(
+	  	#{userId},
+	  	#{identityType,jdbcType=VARCHAR},
+	  	#{identifier,jdbcType=VARCHAR},
+	  	#{credential,jdbcType=VARCHAR},
+	  	now(),
+	  	now()
+	)
+  </insert>
+  
+  <!-- 根据account and nickName查询用户信息 -->
+  <select id="queryUserByAccountAndNickName" parameterType="String" resultType="com.chasel.blog.vo.User">
+  	<include refid="userBaseSql"></include>
+	<where>
+		<if test='account!=null and account!=""'>
+			account = #{account}
+		</if>
+		<if test='nickName!=null and nickName!=""'>
+			nick_name = #{nickName}
+		</if>
+	</where> 
+  </select>
+  
+  <!-- 根据用户ID删除用户信息 -->
+  <delete id="delete" parameterType="java.lang.Long">
+  	DELETE FROM t_user WHERE id=#{id}
+  </delete>
+  
+  <!-- 根据用户ID查询用户标识表信息 -->
+  <select id="queryAuthByUserId" parameterType="java.lang.Long" resultType="com.chasel.blog.vo.UserAuth">
+  	<include refid="authBaseSql"></include>
+  	WHERE user_id=#{userId}
+  </select>
+  
+  <!-- 根据用户ID删除用户标识表信息 -->
+  <delete id="delAuthByUserId" parameterType="java.lang.Long">
+  	DELETE FROM t_user_auth WHERE user_id=#{userId}
+  </delete>
+  
+  <!-- 更新用户phone、email -->
+  <update id="update" parameterType="com.chasel.blog.vo.User">
+  	UPDATE t_user
+  	<set> 
+  		<if test="null != phone and '' != phone">phone=#{phone,jdbcType=VARCHAR},</if>
+  		<if test="null != email and '' != email">email=#{email,jdbcType=VARCHAR},</if>
+  	</set>
+  	WHERE id=#{id}
+  </update>
+  
+  <!-- 更新auth credential -->
+  <update id="updateAuthCredential">
+  	UPDATE t_user_auth
+  	<set> 
+  		<if test="null != identifier and '' != identifier">identifier=#{identifier,jdbcType=VARCHAR},</if>
+  		<if test="null != credential and '' != credential">credential=#{credential,jdbcType=VARCHAR}</if>
+  	</set>
+  	WHERE user_id=#{userId} and identity_type=#{identityType}
+  </update>
+  
+  <!-- 用户信息分页模糊查询 -->
+  <select id="findAll" resultType="com.chasel.blog.vo.User">
+  	<include refid="userBaseSql"></include>
+  	<where>
+  		1=1
+	  	<if test='account!=null and account!=""'>
+	  		AND account LIKE CONCAT(CONCAT('%',#{account,jdbcType=VARCHAR}),'%')
+	  	</if>
+	  	<if test='nickName!=null and nickName!=""'>
+	  		AND nick_name LIKE CONCAT(CONCAT('%',#{nickName,jdbcType=VARCHAR}),'%')
+	  	</if>
+	  	<if test='phone!=null and phone!=""'>
+	  		AND phone LIKE CONCAT(CONCAT('%',#{phone,jdbcType=VARCHAR}),'%')
+	  	</if>
+	  	<if test='email!=null and email!=""'>
+	  		AND email LIKE CONCAT(CONCAT('%',#{email,jdbcType=VARCHAR}),'%')
+	  	</if>
+  	</where>
+  </select>
+  
+</mapper>
